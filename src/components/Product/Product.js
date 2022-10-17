@@ -63,6 +63,10 @@ const Product = ({ id, name, title, basePrice, colors, sizes }) => {
                         prepareColorClassName(color),
                         color === currentColor && styles.active
                       )}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentColor(color);
+                      }}
                     ></button>
                   </li>
                 );
