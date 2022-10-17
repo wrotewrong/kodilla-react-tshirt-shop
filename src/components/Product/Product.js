@@ -8,14 +8,16 @@ const Product = ({ id, name, title, basePrice, colors, sizes }) => {
   const [currentColor, setCurrentColor] = useState(colors[0]);
   const [currentSize, setCurrentSize] = useState(sizes[0].name);
 
-  console.log(currentColor);
-  console.log(currentSize);
   console.log(`${name} ${currentColor} shirt`);
 
   const prepareColorClassName = (color) => {
     return styles[
       'color' + color[0].toUpperCase() + color.substr(1).toLowerCase()
     ];
+  };
+
+  const getPrice = (basePrice, additionalPrice) => {
+    return basePrice + additionalPrice;
   };
 
   return (
@@ -30,7 +32,14 @@ const Product = ({ id, name, title, basePrice, colors, sizes }) => {
       <div>
         <header>
           <h2 className={styles.name}>{title}</h2>
-          <span className={styles.price}>Price: {basePrice}$</span>
+          <span className={styles.price}>
+            Price:
+            {getPrice(
+              basePrice,
+              sizes.find((item) => item.name === currentSize).additionalPrice
+            )}
+            $
+          </span>
         </header>
         <form>
           <div className={styles.sizes}>
@@ -44,6 +53,10 @@ const Product = ({ id, name, title, basePrice, colors, sizes }) => {
                       className={clsx(
                         size.name === currentSize && styles.active
                       )}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentSize(size.name);
+                      }}
                     >
                       {size.name}
                     </button>
