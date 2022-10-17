@@ -2,13 +2,27 @@ import styles from './Product.module.scss';
 import clsx from 'clsx';
 import Button from '../Button/Button';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const Product = ({ id, name, title, basePrice, colors, sizes }) => {
+const Product = ({ name, title, basePrice, colors, sizes }) => {
   const [currentColor, setCurrentColor] = useState(colors[0]);
   const [currentSize, setCurrentSize] = useState(sizes[0].name);
 
-  console.log(`${name} ${currentColor} shirt`);
+  useEffect(() => console.log(currentColor), [currentColor]);
+
+  const getSummary = (e) => {
+    e.preventDefault();
+    console.log(`
+    Summary
+    ==============
+    Name: ${title} 
+    Price: ${getPrice(
+      basePrice,
+      sizes.find((item) => item.name === currentSize).additionalPrice
+    )}
+    Size: ${currentSize}
+    Color: ${currentColor}`);
+  };
 
   const prepareColorClassName = (color) => {
     return styles[
@@ -86,7 +100,7 @@ const Product = ({ id, name, title, basePrice, colors, sizes }) => {
               })}
             </ul>
           </div>
-          <Button className={styles.button}>
+          <Button action={getSummary} className={styles.button}>
             <span className='fa fa-shopping-cart' />
           </Button>
         </form>
